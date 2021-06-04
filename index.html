@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/index.css">
+  <title>HTML5拖拽 和 画布</title>
+  <style>
+    canvas {
+      /*background-color: #5bf380;*/
+    }
+    .box {
+      width: 375px;
+      height: 400px;
+      margin: 10px auto 0;
+      box-sizing: border-box;
+      border: dotted 1px red;
+    }
+    .small {
+      position: fixed;
+      left: 50px;
+      top: 30px;
+    }
+    .num1 {
+       border: 1px solid green;
+    }
+    button{
+      border: none;
+      display: block;
+      margin: 0 auto 10px;
+      background-color: #5bc0de;
+    }
+  </style>
+  <!--  21-06-03 周四  -->
+</head>
+<body>
+<!--<canvas width="400" height="400" style="border: 1px dotted red; margin: 10px auto 0; display: block"></canvas>-->
+
+<div class="box"  ></div>
+<div class="small">
+  <div class="num1" draggable="true" data-name="h1">1级标题</div>
+  <div class="num1" draggable="true" data-name="h2">2级标题</div>
+  <div class="num1" draggable="true" data-name="h3">3级标题</div>
+  <div class="num1" draggable="true" data-name="h4">4级标题</div>
+  <div class="num1" draggable="true" data-name="h5">5级标题</div>
+  <img src="images/yingyue%20.svg" alt="" width="50" draggable="true" class="num1" data-name="imgs">
+  <button data-name="btn" class="num1" draggable="true">按钮</button>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+// let cc = $('canvas')
+// let c = cc.getContext('2d')
+// let arr = [
+//   {
+//     points: [[0, 0], [400, 0], [200, 200]],
+//     bg: 'purple'
+//   },
+//   {
+//     points: [[0, 0], [0, 400], [200, 200]],
+//     bg: 'green'
+//   },
+//   {
+//     points: [[200, 200], [300, 300], [200, 400], [100, 300]],
+//     bg: 'red'
+//   },
+//   {
+//     points: [[100, 300], [200, 400], [0, 400]],
+//     bg: 'deepskyblue'
+//   },
+//   {
+//     points: [[200, 200], [300, 100], [300, 300]],
+//     bg: 'pink'
+//   },
+//   {
+//     points: [[400, 0], [400, 200], [300, 300], [300, 100]],
+//     bg: 'orange'
+//   },
+//   {
+//     points: [[400, 200], [400, 400], [200, 400]],
+//     bg: 'yellow'
+//   },
+// ]
+//
+// arr.forEach(function (item){
+//   c.beginPath()
+//   for (let i = 0; i < item.points.length; i++){
+//       let p = item.points[i]
+//       if(i === 0) {
+//         c.moveTo(p[0],p[1])
+//       }else {
+//         c.lineTo(p[0],p[1])
+//       }
+//   }
+//   c.closePath()
+//   c.fillStyle = item.bg
+//   c.fill()
+// })
+
+
+
+
+
+
+let box = $('.box')
+let num1 = $$('.small .num1')
+//包装方法
+function gy(tag,name,obj) { //定义参数 标签和名字 和 对象-（宽度和路径）传入对象的原因是因为可以不传，传一个空的。
+  tag = document.createElement(tag)
+  tag.innerHTML = name
+  let w = obj.w //宽度
+  let img_src = obj.img_src //图片路径
+  tag.width = w
+  tag.src = img_src
+  let colorr = obj.colorr
+  tag.style.color = colorr
+  let bgcolor = obj. bgcolor
+  tag.style.backgroundColor =  bgcolor
+  box.append(tag)
+}
+//被拖拽的元素
+num1.forEach(function (item){
+  item.addEventListener('dragstart',function (e){
+    let name = this.getAttribute('data-name')//获得属性
+    e.dataTransfer.setData('data',name) //获得到数据，然后给他设置
+  })
+})
+//拖拽进去的盒子     //drop推动
+box.addEventListener('drop',function (e){
+  e.preventDefault()
+  let data = e.dataTransfer.getData("data"); //获取到数据
+  switch (data){
+    case 'h1':
+      gy('h1','我是一个一级标题',{})
+       break
+    case 'h2':
+      gy('h2','我是一个二级标题',{})
+      break
+    case 'h3':
+      gy('h3','我是一个三级标题',{})
+      break
+    case 'h4':
+      gy('h4','我是一个四级标题',{})
+      break
+    case 'h5':
+      gy('h5','我是一个五级标题',{})
+      break
+    case 'imgs':
+      gy('img','我是一个五级标题',{
+          img_src: 'images/yingyue%20.svg',
+          w:50,
+      })
+      break
+    case 'btn':
+      gy('button','我是一个按钮',{
+        w: 50 + 'px',
+        colorr: 'red',
+        bgcolor: '#61f171'
+      })
+      break
+  }
+})
+//dragover 拖过
+box.addEventListener('dragover',function (e){
+  e.preventDefault()
+})
+
+</script>
+</body>
+</html>
